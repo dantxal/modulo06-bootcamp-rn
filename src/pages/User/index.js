@@ -27,6 +27,7 @@ export default class User extends Component {
   static propTypes = {
     navigation: PropTypes.shape({
       getParam: PropTypes.func,
+      navigate: PropTypes.func,
     }).isRequired,
   };
 
@@ -74,9 +75,15 @@ export default class User extends Component {
   loadMore = () => {
     const {page} = this.state;
     const nextPage = page + 1;
-    console.tron.log(`loading page ${nextPage}`);
     this.setState({page: nextPage});
     this.setStars(nextPage);
+  };
+
+  handleNavigate = repository => {
+    console.tron.log('handling navigate');
+    const {navigation} = this.props;
+
+    navigation.navigate('Repository', {repository});
   };
 
   render() {
@@ -105,7 +112,7 @@ export default class User extends Component {
             onEndReachedThreshhold={0.2}
             onEndReached={this.loadMore}
             renderItem={({item}) => (
-              <Starred>
+              <Starred onPress={() => this.handleNavigate(item)}>
                 <OwnerAvatar source={{uri: item.owner.avatar_url}} />
                 <Info>
                   <Title>{item.name}</Title>
